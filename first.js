@@ -1,23 +1,23 @@
 var tl = gsap.timeline();
+var locoScroll; // Defined Globally
+
 function locomotiveAnimation() {
   gsap.registerPlugin(ScrollTrigger);
 
-  // Using Locomotive Scroll from Locomotive https://github.com/locomotivemtl/locomotive-scroll
-
-  const locoScroll = new LocomotiveScroll({
+  // Assigned to the global variable (no 'const' or 'let')
+  locoScroll = new LocomotiveScroll({
     el: document.querySelector("#main"),
     smooth: true,
   });
-  // each time Locomotive Scroll updates, tell ScrollTrigger to update too (sync positioning)
+  
   locoScroll.on("scroll", ScrollTrigger.update);
 
-  // tell ScrollTrigger to use these proxy methods for the "#main" element since Locomotive Scroll is hijacking things
   ScrollTrigger.scrollerProxy("#main", {
     scrollTop(value) {
       return arguments.length
         ? locoScroll.scrollTo(value, 0, 0)
         : locoScroll.scroll.instance.scroll.y;
-    }, // we don't have to define a scrollLeft because we're only scrolling vertically.
+    },
     getBoundingClientRect() {
       return {
         top: 0,
@@ -26,19 +26,15 @@ function locomotiveAnimation() {
         height: window.innerHeight,
       };
     },
-    // LocomotiveScroll handles things completely differently on mobile devices - it doesn't even transform the container at all! So to get the correct behavior and avoid jitters, we should pin things with position: fixed on mobile. We sense it by checking to see if there's a transform applied to the container (the LocomotiveScroll-controlled element).
     pinType: document.querySelector("#main").style.transform
       ? "transform"
       : "fixed",
   });
 
-  // each time the window updates, we should refresh ScrollTrigger and then update LocomotiveScroll.
   ScrollTrigger.addEventListener("refresh", () => locoScroll.update());
-
-  // after everything is set up, refresh() ScrollTrigger and update LocomotiveScroll because padding may have been added for pinning, etc.
   ScrollTrigger.refresh();
 }
-
+// ... rest of your code
 
 function animation() {
     // Animation for "Your Web Experiences is Loading Right now"
@@ -167,66 +163,22 @@ gsap.to("#videocursor", {
 
 })
 }
-/*
-function playv() {
-    // Get the necessary elements
-const videoContainer = document.getElementById('page2v');
-const videoElement = document.getElementById('videov');
-
-// Add a click listener to the container
-videoContainer.addEventListener('click', function() {
-    
-    // Check if the video is currently paused
-    if (videoElement.paused) {
-        // If paused, play the video
-        videoElement.play();
-        
-        // Add a class to the container to make the video visible via CSS
-        videoContainer.classList.add('video-playing');
-    } else {
-        // If playing, pause the video
-        videoElement.pause();
-        
-        // Remove the class to hide the video and show the background image
-        videoContainer.classList.remove('video-playing');
-    }
-});
-}
-*/
 function sheryanimation(){
-Shery.imageEffect("#imagegr1", {
-  style: 1 /*OR 5 for different variant */,
-  debug: true,
-});Shery.imageEffect("#imagegr2", {
-  style: 1 /*OR 5 for different variant */,
-  debug: true,
-});Shery.imageEffect("#imagegr3", {
-  style: 1 /*OR 5 for different variant */,
-  debug: true,
-});
+    Shery.imageEffect("#imagegr1", {
+        style: 5,
+        debug: true,
+    });
+    
+    Shery.imageEffect("#imagegr2", {
+        style: 5,
+        debug: true,
+    });
+    
+    Shery.imageEffect("#imagegr3", {
+        style: 5,
+        debug: true,
+    });
 }
-/*
-function flagAnimation() {
-  document.addEventListener("mousemove", function (dets) {
-    gsap.to(".nav2 img", {
-      x: dets.x,
-      y: dets.y
-    })
-  })
-  document.querySelector("#webl").addEventListener("mouseenter", function () {
-    gsap.to(".nav2 img", {
-      opacity: 1,
-      
-    })
-  })
-  document.querySelector("#webl").addEventListener("mouseleave", function () {
-    gsap.to(".nav2 img", {
-      opacity: 0
-    })
-  })
-
-}
-*/
 function flagAnimation() {
   const flag = document.querySelector(".nav2 img");
   
@@ -278,7 +230,6 @@ function ab(){
 animation();
 cursoranimation();
 flagAnimation();
-playv();
 locomotiveAnimation();
 sheryanimation();
-ab();
+
